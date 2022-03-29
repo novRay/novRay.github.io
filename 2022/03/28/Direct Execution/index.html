@@ -55,7 +55,8 @@
 <p>如果user program想要发起特权操作（privileged operation），需要向kernel发起<strong>system call</strong>：程序通过执行<strong>trap</strong>指令，切换到kernel mode，在kernel启动时初始化的<strong>trap table</strong>内有命令编号，对应不同的<strong>trap handlers</strong>。硬件通过这些handlers跳转到对应的地址以作出相应的操作。user program只知道命令编号而不知道对应地址，并且OS拒绝非法的命令编号，从而实现了保护作用。</p>
 <p>user mode切换到kernel mode时,user mode的寄存器值会保存到<strong>kernel stack</strong>。当kernel操作完成后,切换回user mode时会重新加载</p>
 <p>如图所示是一个完整的LDE协议</p>
-<p>![屏幕截图 2021-12-06 214503](.assets&#x2F;屏幕截图 2021-12-06 214503-16484772628232.png)</p>
+<img src=".assets/屏幕截图 2021-12-06 214503-16484772628232.png" alt="屏幕截图 2021-12-06 214503" style="zoom:67%;" />
+
 <h2 id="6-3-Problem-2-Switching-Between-Processes"><a href="#6-3-Problem-2-Switching-Between-Processes" class="headerlink" title="6.3 Problem #2: Switching Between Processes"></a>6.3 Problem #2: Switching Between Processes</h2><p>下面一个问题是：如何让OS重获CPU的控制权？</p>
 <h3 id="合作方法"><a href="#合作方法" class="headerlink" title="合作方法"></a>合作方法</h3><p>程序向OS发起system call，或者做出非法行为（如除0）时，会生成一个trap给OS，这样OS就重获了CPU的控制权。</p>
 <h3 id="非合作方法"><a href="#非合作方法" class="headerlink" title="非合作方法"></a>非合作方法</h3><p>合作方法中OS是被动的，如果程序陷入死循环，并且一直不发起system call，那只能重启机器来让OS控制CPU了。解决方案是设置一个<strong>timer interrupt</strong>机制，每过几毫秒interrupt就被抬起来暂停进程，OS重获CPU控制权，切换到一个新的进程。</p>
